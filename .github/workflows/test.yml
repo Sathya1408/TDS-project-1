@@ -16,7 +16,12 @@ jobs:
           python-version: '3.x'  # Use the latest Python version
 
       - name: Install dependencies
-        run: pip install requests  # Install requests module
+        run: pip install -r requirements.txt  # Install all dependencies
+
+      - name: Start Flask server
+        run: |
+          nohup python app.py &  # Start Flask in background
+          sleep 5  # Wait for server to start
 
       - name: Run API Tests
         run: python test_api.py  # Run your test script
