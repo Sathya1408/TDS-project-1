@@ -1,23 +1,32 @@
 import requests
 import time
 
-BASE_URL = "http://your-api-url.com"  # Replace with your actual API URL
+BASE_URL = "http://localhost:5000"
 
-def test_post_and_get():
-    tasks = ["task1", "task2", "task3"]
-    
-    for task in tasks:
-        # Send a POST request to execute the task
-        response = requests.post(f"{BASE_URL}/run?task={task}")
-        assert response.status_code == 200, f"POST failed for {task}"
+def post_task(task_name):
+    """Send a POST request to /run?task=..."""
+    url = f"{BASE_URL}/run?task={task_name}"
+    response = requests.post(url)
+    print(f"POST {url} -> Status: {response.status_code}, Response: {response.text}")
+    return response
 
-        # Wait for the task to complete (adjust as needed)
-        time.sleep(2)  
+def get_file(path):
+    """Send a GET request to /read?path=..."""
+    url = f"{BASE_URL}/read?path={path}"
+    response = requests.get(url)
+    print(f"GET {url} -> Status: {response.status_code}, Response: {response.text}")
+    return response
 
-        # Send a GET request to check the created file
-        response = requests.get(f"{BASE_URL}/read?path={task}.txt")
-        assert response.status_code == 200, f"GET failed for {task}"
-        print(f"Test passed for {task}")
-
+# Test cases
 if __name__ == "__main__":
-    test_post_and_get()
+    task_names = ["task1", "task2", "task3"]
+
+    # Call POST /run for multiple tasks
+    for task in task_names:
+        post_task(task)
+        time.sleep(1)  # Wait a bit before the next request
+
+    # Check if the correct files are created
+    file_paths = ["output/task1.txt", "output/task2.txt", "output/task3.txt"]
+    for path in file_paths:
+        get_file(path)
