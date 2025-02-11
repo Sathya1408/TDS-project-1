@@ -1,0 +1,22 @@
+name: API Tests
+
+on: [push, pull_request]  # Runs on every push and pull request
+
+jobs:
+  test-api:
+    runs-on: ubuntu-latest  # Runs the test on Ubuntu
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3  # Pulls your repo into the runner
+
+      - name: Set up Python
+        uses: actions/setup-python@v3
+        with:
+          python-version: '3.x'  # Use the latest Python version
+
+      - name: Install dependencies
+        run: pip install requests  # Install requests module
+
+      - name: Run API Tests
+        run: python test_api.py  # Run your test script
